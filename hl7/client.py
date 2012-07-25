@@ -65,12 +65,18 @@ class MLLPClient(object):
         # upload the data
         self.socket.send(data)
         # wait for the ACK/NACK
-        return self.socket.recv(RECV_BUFFER)
+        data = ""
+        while True:
+            if not "\x1c" in data:
+                data += self.socket.recv(RECV_BUFFER)
+            else:
+                break
+        return data.replace("\r","\n")
 
 
 # wrappers to make testing easier
 def stdout(content):
-    sys.stdout.write(content + '\n')
+    sys.stdout.write(content)
 
 def stdin():
     return sys.stdin
