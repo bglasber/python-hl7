@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from setuptools.command.test import test as TestCommand
+from distutils.core import setup
 import hl7 as _hl7
 
 class PyTest(TestCommand):
