@@ -1,10 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-from setuptools import setup
-
+from setuptools.command.test import test as TestCommand
 import hl7 as _hl7
-    
+
+class PyTest(TestCommand):
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+    def run(self):
+        import pytest
+        pytest.main(self.test_args)
 setup(
     name = 'hl7',
     version = _hl7.__version__,
@@ -29,12 +35,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     packages = ['hl7'],
-    test_suite = 'tests',
-    tests_require = ['mock'],
-    entry_points = {
-        'console_scripts': [
-            'mllp_send = hl7.client:mllp_send',
-        ],
-    },
+    tests_require = ['pytest'],
+    cmdclass = {'test': PyTest},
     zip_safe=True,
 )
